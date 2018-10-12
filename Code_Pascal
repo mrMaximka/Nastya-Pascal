@@ -1,0 +1,44 @@
+const N = 10;
+var
+  min, sum, rez :double;
+  iMin, i, j :integer;
+  Arr: array [1..N] of double;
+  isSum, isFind :boolean;
+begin
+  writeln('Заполните массив:');
+  for i:=1 to N do read(Arr[i]);
+  isSum := false;         // Флаг, что нужно считать задание 2
+  isFind := false;        // Флаг, что задание 2 посчитано
+  sum := 0;               // Сумма на задание 2
+  iMin := 1;              // Миимальный номер на задание 1
+  min := Arr[1];          // Минимальное число на задание 1
+  for i:=1 to N do begin              // Решили задание 1
+    if (Arr[i] < min) then begin
+      min := Arr[i];
+      iMin := i;
+    end;
+    if (isSum) and (Arr[i] >= 0) then sum += Arr[i];              // Если надо считать задание 2, то считаем
+    if (Arr[i] < 0) and (isFind = false) and (isSum) then begin   // Если встретили отрицательное число, но подсчет уже идет и задание 2 не выполнено
+      isSum := false;                                             // Значит заканчиваем подсчет
+      isFind := true;
+    end;
+    if (Arr[i] < 0) and (isFind = false) and (isSum = false) then isSum := true;  // Если встретили отрицательно, но задание не выполнено и подсчет не идет
+  end;                                                                            // То начали подсчет
+  if (isFind = false) then sum := 0;      // Если задание не выполнено, то sum = 0 (например, если только одно отрицательно, то подсчет начнется, но если второго не будет, то тут он обнулится)
+  writeln('Дан массив:');
+  for i:=1 to N do write(Arr[i],' ');
+  writeln();
+  writeln('Номер минимального элемента массива i = ',iMin,'; Arr[i] = ',min);
+  writeln('Сумма элементов между первой парой отрицательных элементов: ',sum);
+  j := 1;
+  for i:=1 to N do begin                    // Преобразовали массив. Тупо перекинули нужные элементы на первые места, без всякой сортировки
+    if (abs(Arr[i]) <= 1) then begin        // Принцип похож на сортировку пузырьком
+      rez := Arr[j];
+      Arr[j] := Arr[i];
+      Arr[i] := rez;
+      j += 1;
+    end;
+  end;
+  writeln('После преобразования массив выглядит так:');
+  for i:=1 to N do write(Arr[i],' ');
+end.
